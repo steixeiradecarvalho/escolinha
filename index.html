@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Caderno do Dr. Anselmo — Protocolos e parênteses</title>
+<meta name="description" content="Missão autônoma de matemática para o 7º ano: expressões, parênteses e linguagem algébrica.">
+<meta name="theme-color" content="#1b2a41">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Dr. Anselmo">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%231b2a41'/%3E%3Ctext x='256' y='340' font-family='Georgia,serif' font-size='190' fill='%23e0b45c' text-anchor='middle'%3E(x)%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%231b2a41'/%3E%3Ctext x='256' y='340' font-family='Georgia,serif' font-size='190' fill='%23e0b45c' text-anchor='middle'%3E(x)%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --paper:#f4efe4; --card:#fffdf8; --ink:#1c232e; --soft:#5a6270;
+  --line:#ded6c5; --navy:#1b2a41; --navy-2:#26394f; --gold:#b8862b; --gold-2:#e0b45c;
+  --ok:#2b7a5b; --ok-bg:#e6f3ec; --bad:#ab3a3a; --bad-bg:#fbeaea;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  --serif:"Iowan Old Style",Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0; font-family:var(--sans); color:var(--ink); line-height:1.55; font-size:16px;
+  background:
+    radial-gradient(circle at 12% -10%, #fff9ec 0%, transparent 55%),
+    radial-gradient(circle at 108% 8%, #eef2f8 0%, transparent 42%),
+    var(--paper);
+  background-attachment:fixed;
+}
+/* ---------- topo ---------- */
+.top{position:sticky;top:0;z-index:20;background:rgba(244,239,228,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-inner{max-width:820px;margin:0 auto;padding:12px 18px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.brand{display:flex;gap:12px;align-items:center;min-width:0}
+.sigil{font-family:var(--serif);font-size:22px;color:var(--gold-2);background:var(--navy);width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:0 0 auto;box-shadow:0 2px 8px rgba(27,42,65,.25)}
+h1{font-family:var(--serif);font-size:1.02rem;line-height:1.25;margin:0;font-weight:600}
+.sub{margin:1px 0 0;font-size:.74rem;letter-spacing:.04em;text-transform:uppercase;color:var(--soft)}
+.prog{min-width:190px;flex:1 1 190px;max-width:260px}
+.bar{height:8px;background:#e6dfcf;border-radius:99px;overflow:hidden}
+.bar span{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--gold-2));border-radius:99px;transition:width .35s ease}
+.prog p{margin:4px 0 0;font-size:.74rem;color:var(--soft);text-align:right}
+/* ---------- estrutura ---------- */
+.wrap{max-width:820px;margin:0 auto;padding:22px 18px 90px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 18px 14px;margin:0 0 18px;box-shadow:0 1px 2px rgba(28,35,46,.04),0 8px 24px -18px rgba(28,35,46,.35);position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--gold-2),var(--gold))}
+.card-head{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:6px}
+.chip{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--navy);padding:3px 8px;border-radius:6px;flex:0 0 auto}
+.card h2{font-family:var(--serif);font-size:1.16rem;margin:0;font-weight:600;flex:1 1 auto}
+.badge{font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ok);background:var(--ok-bg);border:1px solid #cfe6da;padding:2px 8px;border-radius:99px;opacity:0;transition:opacity .2s}
+.badge.on{opacity:1}
+.intro{margin:0 0 12px;color:var(--soft);font-size:.92rem}
+/* ---------- itens ---------- */
+.item{padding:12px 0;border-top:1px dashed var(--line)}
+.item:first-child{border-top:0;padding-top:4px}
+.q{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}
+.num{font-family:var(--mono);font-size:.78rem;color:var(--soft);border:1px solid var(--line);border-radius:6px;min-width:26px;height:26px;display:grid;place-items:center;flex:0 0 auto;background:#faf7f0}
+.stmt{font-family:var(--mono);font-size:1.02rem;background:rgba(27,42,65,.055);border-left:3px solid var(--gold);padding:3px 10px;border-radius:0 6px 6px 0;display:inline-block}
+.stmt-plain{font-size:.97rem}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-left:36px}
+.ans{font-family:var(--mono);font-size:.98rem;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);min-width:150px;flex:1 1 150px;max-width:320px;outline:none;transition:border-color .15s,box-shadow .15s}
+.ans:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,134,43,.15)}
+textarea.ans{font-family:var(--sans);max-width:100%;width:100%;flex:1 1 100%;resize:vertical;min-height:52px}
+.ans.ok{border-color:#8dc7ac;background:var(--ok-bg)}
+.ans.bad{border-color:#e0b1b1;background:var(--bad-bg)}
+.btn{font:inherit;font-size:.85rem;font-weight:600;letter-spacing:.01em;border:1px solid var(--navy);background:var(--navy);color:#fff;padding:7px 13px;border-radius:9px;cursor:pointer;transition:transform .08s,background .15s}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;color:var(--navy);border-color:var(--line)}
+.btn.ghost:hover{background:#f2ecdf}
+.btn.small{font-size:.76rem;padding:5px 10px}
+.btn.danger{background:transparent;color:var(--bad);border-color:#e3bdbd}
+.opts{display:flex;flex-direction:column;gap:7px;padding-left:36px}
+.opt{display:flex;gap:9px;align-items:flex-start;font-size:.93rem;border:1px solid var(--line);border-radius:9px;padding:8px 10px;cursor:pointer;background:#fff;transition:background .15s,border-color .15s}
+.opt:hover{background:#faf6ec}
+.opt input{margin-top:3px;accent-color:var(--navy);flex:0 0 auto}
+.hint,.sol,.fb{margin:8px 0 0;padding-left:36px;font-size:.88rem}
+.hint{color:var(--gold)}
+.sol{color:var(--navy-2);background:#f6f1e5;border-radius:8px;padding:8px 10px 8px 12px;margin-left:36px;padding-left:12px}
+.fb{font-weight:600}
+.fb.ok{color:var(--ok)} .fb.bad{color:var(--bad)}
+.fb::before{content:"· ";}
+.fb.ok::before{content:"✓ ";} .fb.bad::before{content:"✗ ";}
+[hidden]{display:none!important}
+/* ---------- código ---------- */
+.code{margin-top:14px;padding:12px;border:1px dashed var(--gold);border-radius:12px;background:linear-gradient(180deg,#fffaf0,#fdf7ea)}
+.code-label{margin:0 0 8px;font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--gold)}
+.slots{display:flex;gap:8px;flex-wrap:wrap}
+.slot{width:40px;height:46px;display:grid;place-items:center;font-family:var(--mono);font-size:1.2rem;font-weight:700;border:2px solid var(--line);border-radius:9px;background:#fff;color:#c4bcaa;transition:all .25s}
+.slot.filled{border-color:var(--navy);background:var(--navy);color:var(--gold-2);transform:translateY(-2px);box-shadow:0 4px 12px -6px rgba(27,42,65,.6)}
+/* ---------- diário e ferramentas ---------- */
+.diary .item{border-top:0;padding:6px 0}
+.diary label{display:block;font-size:.9rem;color:var(--soft);margin:10px 0 4px}
+.tools{display:flex;gap:9px;flex-wrap:wrap;margin:6px 0 20px}
+.sw-box{border:1px solid var(--line);border-radius:14px;background:#fbf8f0;padding:12px 16px;margin-bottom:20px}
+.sw-box summary{cursor:pointer;font-weight:600;font-size:.92rem;color:var(--navy)}
+.sw-box p{font-size:.86rem;color:var(--soft)}
+pre{background:var(--navy);color:#e8e2d4;padding:12px;border-radius:10px;overflow:auto;font-family:var(--mono);font-size:.76rem;line-height:1.5}
+footer{text-align:center;font-size:.76rem;color:var(--soft);padding:8px 0 30px}
+/* ---------- responsivo ---------- */
+@media (max-width:520px){
+  .controls,.opts,.hint,.sol,.fb{padding-left:0}
+  .sol{margin-left:0}
+  .card{padding:15px 14px 12px}
+  h1{font-size:.95rem}
+}
+/* ---------- impressão ---------- */
+@media print{
+  body{background:#fff}
+  .top,.tools,.sw-box,footer,.btn{display:none!important}
+  .card{box-shadow:none;border-color:#bbb;break-inside:avoid}
+  .ans{border:1px solid #999}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <span class="sigil" aria-hidden="true">(x)</span>
+      <div>
+        <h1>Protocolos, parênteses e o caderno do Dr. Anselmo</h1>
+        <p class="sub">Material de campo nº 1 · 7º ano · missão autônoma</p>
+      </div>
+    </div>
+    <div class="prog">
+      <div class="bar"><span id="progfill"></span></div>
+      <p id="proglabel">0 de 7 etapas</p>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <main id="app"></main>
+
+  <section class="card diary" id="diary">
+    <div class="card-head">
+      <span class="chip">Diário</span>
+      <h2>Diário de bordo</h2>
+      <span class="badge" id="diarybadge">✓ concluído</span>
+    </div>
+    <p class="intro">Responda sem se preocupar com “certo” ou “errado”. Isto é para você olhar o próprio caminho.</p>
+    <div class="item">
+      <label for="k1">O bloco que exigiu mais atenção foi…</label>
+      <textarea class="ans diary-in" id="k1" data-id="k1" rows="2" placeholder="ex.: Bloco C, porque precisei lembrar da prioridade"></textarea>
+      <label for="k2">Onde eu quase errei…</label>
+      <textarea class="ans diary-in" id="k2" data-id="k2" rows="2" placeholder="ex.: quase dividi antes de multiplicar"></textarea>
+      <label for="k3">Uma coisa que eu expliquei para mim mesmo…</label>
+      <textarea class="ans diary-in" id="k3" data-id="k3" rows="2" placeholder="ex.: parênteses são marcas de leitura"></textarea>
+    </div>
+  </section>
+
+  <section class="tools">
+    <button class="btn" id="export">Exportar respostas</button>
+    <button class="btn ghost" id="print">Imprimir / PDF</button>
+    <button class="btn danger" id="reset">Recomeçar do zero</button>
+  </section>
+
+  <details class="sw-box">
+    <summary>Como tornar este material realmente instalável e offline</summary>
+    <p>Este arquivo já funciona offline quando aberto no navegador. Para ganhar ícone na tela inicial e cache automático, coloque estes dois arquivos ao lado do <code>index.html</code>, numa pasta servida por <code>https</code> (ou <code>localhost</code>).</p>
+    <p><strong>sw.js</strong> <button class="btn ghost small" data-copy="swcode">copiar</button></p>
+    <pre id="swcode">const CACHE = 'anselmo-v1';
+const ASSETS = ['./', './index.html'];
+
+self.addEventListener('install', e =&gt; {
+  e.waitUntil(caches.open(CACHE).then(c =&gt; c.addAll(ASSETS)).then(() =&gt; self.skipWaiting()));
+});
+self.addEventListener('activate', e =&gt; {
+  e.waitUntil(caches.keys()
+    .then(ks =&gt; Promise.all(ks.filter(k =&gt; k !== CACHE).map(k =&gt; caches.delete(k))))
+    .then(() =&gt; self.clients.claim()));
+});
+self.addEventListener('fetch', e =&gt; {
+  if (e.request.method !== 'GET') return;
+  e.respondWith(
+    caches.match(e.request).then(hit =&gt; hit || fetch(e.request).then(res =&gt; {
+      const copy = res.clone();
+      caches.open(CACHE).then(c =&gt; c.put(e.request, copy));
+      return res;
+    }).catch(() =&gt; caches.match('./index.html')))
+  );
+});</pre>
+    <p><strong>manifest.webmanifest</strong> <button class="btn ghost small" data-copy="mfcode">copiar</button></p>
+    <pre id="mfcode">{
+  "name": "Caderno do Dr. Anselmo",
+  "short_name": "Dr. Anselmo",
+  "description": "Missão de matemática — 7º ano",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4efe4",
+  "theme_color": "#1b2a41",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}</pre>
+  </details>
+
+  <footer>Material de campo nº 1 — protocolos, parênteses e o caderno do Dr. Anselmo.</footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ================= CONTEÚDO ================= */
+  const BLOCKS = [
+    {
+      id: 'A',
+      title: 'O mesmo número, histórias diferentes',
+      intro: 'Calcule sem calculadora. Observe onde os parênteses mudam a história.',
+      items: [
+        { id:'a1', type:'num', q:'8 + 4 × 3', answers:[20], hint:'Multiplicação antes da soma.', sol:'4 × 3 = 12; 8 + 12 = 20.' },
+        { id:'a2', type:'num', q:'(8 + 4) × 3', answers:[36], sol:'8 + 4 = 12; 12 × 3 = 36.' },
+        { id:'a3', type:'num', q:'20 − 6 ÷ 2', answers:[17], hint:'Divisão antes da subtração.', sol:'6 ÷ 2 = 3; 20 − 3 = 17.' },
+        { id:'a4', type:'num', q:'(20 − 6) ÷ 2', answers:[7], sol:'20 − 6 = 14; 14 ÷ 2 = 7.' },
+        { id:'a5', type:'text', q:'Quais pares deram resultados diferentes? O que mudou de um para o outro?',
+          sol:'Os pares 1–2 e 3–4. Os parênteses mudaram a ordem: no primeiro par, a soma passou a ser feita antes da multiplicação; no segundo, a subtração antes da divisão.' }
+      ]
+    },
+    {
+      id: 'B',
+      title: 'Tradução de protocolos',
+      intro: 'Use x para “número secreto”. Traduza cada instrução para linguagem matemática.',
+      items: [
+        { id:'b1', type:'expr', q:'O número secreto mais 7, e depois tudo multiplicado por 3.', expect:'3(x+7)',
+          hint:'A palavra “tudo” costuma pedir parênteses.', sol:'3(x + 7)' },
+        { id:'b2', type:'expr', q:'O triplo do número secreto, menos 7.', expect:'3x-7', sol:'3x − 7' },
+        { id:'b3', type:'expr', q:'A metade do número secreto, acrescida de 5.', expect:'x/2+5', sol:'x/2 + 5' },
+        { id:'b4', type:'expr', q:'A metade da soma do número secreto com 5.', expect:'(x+5)/2',
+          hint:'A soma acontece antes da metade.', sol:'(x + 5)/2' },
+        { id:'b5', type:'text', q:'Agora o contrário: o que a expressão 4(x − 2) manda fazer?',
+          sol:'Multiplicar por 4 a diferença entre o número secreto e 2 — isto é, o quádruplo de (x − 2), com a subtração feita antes.' }
+      ]
+    },
+    {
+      id: 'C',
+      title: 'O erro do Dr. Anselmo',
+      intro: 'Duas soluções do caderno estão erradas. Encontre o erro, corrija e explique.',
+      items: [
+        { id:'c1', type:'choice', q:'5 + 2(x + 1) = 5 + 2x + 1 = 2x + 6 — onde está o erro?',
+          options:[
+            'O 5 deveria ser multiplicado por 2 também.',
+            'O 2 precisa multiplicar os dois termos do parêntese: 2x + 2, não 2x + 1.',
+            'Não há erro: a distributiva atinge só o primeiro termo.'
+          ], correct:1, sol:'A distributiva atinge todos os termos: 2(x + 1) = 2x + 2.' },
+        { id:'c2', type:'expr', q:'Escreva a forma corrigida da expressão final.', expect:'2x+7',
+          sol:'5 + 2(x + 1) = 5 + 2x + 2 = 2x + 7' },
+        { id:'c3', type:'choice', q:'12 ÷ 3 × 2 = 12 ÷ 6 = 2 — onde está o erro?',
+          options:[
+            'Nada: primeiro resolve-se a multiplicação.',
+            'Multiplicação e divisão têm a mesma prioridade: resolve-se da esquerda para a direita.',
+            'Deveria ser 12 ÷ (3 × 2) em qualquer caso.'
+          ], correct:1, sol:'Mesma prioridade → da esquerda para a direita: 12 ÷ 3 = 4; 4 × 2 = 8.' },
+        { id:'c4', type:'num', q:'12 ÷ 3 × 2', answers:[8], sol:'12 ÷ 3 = 4; 4 × 2 = 8.' }
+      ]
+    },
+    {
+      id: 'D',
+      title: 'Código da caixa-preta',
+      intro: 'Use x = 4. Calcule e transforme o resultado em letra: A=1, B=2, C=3, … Z=26.',
+      items: [
+        { id:'d1', type:'num', q:'3x + 1', answers:[13], sol:'3·4 + 1 = 13 → M' },
+        { id:'d2', type:'num', q:'x + 1', answers:[5], sol:'4 + 1 = 5 → E' },
+        { id:'d3', type:'num', q:'5x − 1', answers:[19], sol:'5·4 − 1 = 19 → S' },
+        { id:'d4', type:'num', q:'4x + 4', answers:[20], sol:'4·4 + 4 = 20 → T' },
+        { id:'d5', type:'num', q:'5x − 2', answers:[18], sol:'5·4 − 2 = 18 → R' },
+        { id:'d6', type:'num', q:'2x − 3', answers:[5], sol:'2·4 − 3 = 5 → E' },
+        { id:'d7', type:'word', q:'Qual é a palavra secreta?', answers:['mestre'], sol:'MESTRE' }
+      ]
+    },
+    {
+      id: 'E',
+      title: 'A balança teimosa',
+      intro: 'Resolva sem chutar: 3x − 4 = 11.',
+      items: [
+        { id:'e1', type:'num', q:'Qual é o valor de x?', answers:[5],
+          hint:'Some 4 dos dois lados; depois divida por 3.', sol:'3x = 15 → x = 5' },
+        { id:'e2', type:'text', q:'Qual foi seu primeiro passo?', sol:'Somar 4 nos dois lados para isolar 3x: 3x = 15.' },
+        { id:'e3', type:'text', q:'Como você confere se acertou?', sol:'Substituindo na equação original: 3·5 − 4 = 15 − 4 = 11. Volta ao mesmo valor.' }
+      ]
+    },
+    {
+      id: 'F',
+      title: 'Desafio final: invente um protocolo',
+      intro: 'Crie uma expressão com x que dê 20 quando x = 6.',
+      items: [
+        { id:'f1', type:'expr6', q:'Sua expressão:', sol:'Há infinitas: 2(x + 4), 3x + 2, x + 14, 20x/6 …' },
+        { id:'f2', type:'text', q:'Escreva sua expressão em português.', sol:'Ex.: “o dobro da soma do número secreto com 4”.' }
+      ]
+    }
+  ];
+
+  const ITEMS = {};
+  BLOCKS.forEach(b => b.items.forEach(it => { ITEMS[it.id] = it; }));
+  const CODE_LETTERS = ['M','E','S','T','R','E'];
+
+  /* ================= ESTADO ================= */
+  const KEY = 'anselmo7.v1';
+  let store = { answers:{}, status:{}, diary:{} };
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      store.answers = parsed.answers || {};
+      store.status  = parsed.status  || {};
+      store.diary   = parsed.diary   || {};
+    }
+  } catch (e) {}
+  function persist(){ try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+
+  /* ================= PARSER SEGURO DE EXPRESSÕES ================= */
+  function tokenize(src){
+    let s = String(src).toLowerCase()
+      .replace(/\s+/g,'')
+      .replace(/[×·⋅]/g,'*')
+      .replace(/[÷:]/g,'/')
+      .replace(/[–—−]/g,'-')
+      .replace(/,/g,'.');
+    const out = []; let i = 0;
+    while (i < s.length) {
+      const c = s[i];
+      if (/[0-9.]/.test(c)) {
+        let j = i;
+        while (j < s.length && /[0-9.]/.test(s[j])) j++;
+        const n = parseFloat(s.slice(i, j));
+        if (!isFinite(n)) throw new Error('número inválido');
+        out.push({ k:'num', v:n }); i = j;
+      } else if (/[a-z]/.test(c)) {
+        if (c !== 'x') throw new Error('símbolo desconhecido');
+        out.push({ k:'x' }); i++;
+      } else if ('+-*/^()'.indexOf(c) >= 0) {
+        out.push({ k:c }); i++;
+      } else {
+        throw new Error('caractere desconhecido');
+      }
+    }
+    if (!out.length) throw new Error('vazio');
+    /* multiplicação implícita */
+    const withMul = [];
+    for (let i = 0; i < out.length; i++) {
+      const prev = out[i-1], cur = out[i];
+      if (prev) {
+        const prevEnds = prev.k === 'num' || prev.k === 'x' || prev.k === ')';
+        const curStarts = cur.k === 'num' || cur.k === 'x' || cur.k === '(';
+        if (prevEnds && curStarts) withMul.push({ k:'*' });
+      }
+      withMul.push(cur);
+    }
+    /* menos unário */
+    const fixed = []; let expectOperand = true;
+    for (const t of withMul) {
+      if (expectOperand && t.k === '-') { fixed.push({ k:'num', v:0 }, { k:'-' }); continue; }
+      if (expectOperand && t.k === '+') { continue; }
+      fixed.push(t);
+      if (t.k === 'num' || t.k === 'x') expectOperand = false;
+      else if (t.k === '(') expectOperand = true;
+      else if (t.k === ')') expectOperand = false;
+      else expectOperand = true;
+    }
+    return fixed;
+  }
+
+  const PREC = { '+':1, '-':1, '*':2, '/':2, '^':3 };
+
+  function toRPN(tokens){
+    const out = [], ops = [];
+    for (const t of tokens) {
+      if (t.k === 'num' || t.k === 'x') { out.push(t); }
+      else if (t.k === '(') { ops.push(t); }
+      else if (t.k === ')') {
+        while (ops.length && ops[ops.length-1].k !== '(') out.push(ops.pop());
+        if (!ops.length) throw new Error('parêntese');
+        ops.pop();
+      } else {
+        while (ops.length) {
+          const top = ops[ops.length-1];
+          if (top.k === '(') break;
+          if (PREC[top.k] > PREC[t.k] || (PREC[top.k] === PREC[t.k] && t.k !== '^')) out.push(ops.pop());
+          else break;
+        }
+        ops.push(t);
+      }
+    }
+    while (ops.length) {
+      const o = ops.pop();
+      if (o.k === '(') throw new Error('parêntese');
+      out.push(o);
+    }
+    return out;
+  }
+
+  function evalRPN(rpn, x){
+    const st = [];
+    for (const t of rpn) {
+      if (t.k === 'num') st.push(t.v);
+      else if (t.k === 'x') st.push(x);
+      else {
+        const b = st.pop(), a = st.pop();
+        if (a === undefined || b === undefined) throw new Error('incompleta');
+        if (t.k === '+') st.push(a + b);
+        else if (t.k === '-') st.push(a - b);
+        else if (t.k === '*') st.push(a * b);
+        else if (t.k === '/') st.push(a / b);
+        else st.push(Math.pow(a, b));
+      }
+    }
+    if (st.length !== 1) throw new Error('incompleta');
+    return st[0];
+  }
+
+  const cacheExpr = new Map();
+  function compile(src){
+    if (cacheExpr.has(src)) return cacheExpr.get(src);
+    const rpn = toRPN(tokenize(src));
+    cacheExpr.set(src, rpn);
+    return rpn;
+  }
+  const SAMPLES = [0.5, 1, 2, 3, 7, 11];
+  function equivalent(a, b){
+    const ra = compile(a), rb = compile(b);
+    for (const s of SAMPLES) {
+      const va = evalRPN(ra, s), vb = evalRPN(rb, s);
+      if (!isFinite(va) || !isFinite(vb)) return false;
+      if (Math.abs(va - vb) > 1e-9 * Math.max(1, Math.abs(va), Math.abs(vb))) return false;
+    }
+    return true;
+  }
+
+  /* ================= UTILITÁRIOS ================= */
+  function fmt(n){
+    if (!isFinite(n)) return '—';
+    return Math.abs(n - Math.round(n)) < 1e-9 ? String(Math.round(n)) : String(Math.round(n * 100) / 100);
+  }
+  function parseNum(s){
+    if (typeof s !== 'string') return null;
+    let t = s.trim().replace(/\s/g,'').replace(/[–—−]/g,'-');
+    if (!t) return null;
+    if (t.indexOf(',') >= 0 && t.indexOf('.') >= 0) t = t.replace(/\./g,'').replace(',','.');
+    else t = t.replace(',','.');
+    if (!/^-?\d*\.?\d+$/.test(t)) return null;
+    const n = parseFloat(t);
+    return isFinite(n) ? n : null;
+  }
+  function stripAccents(s){
+    return String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z]/g,'');
+  }
+  function el(id){ return document.getElementById(id); }
+
+  /* ================= RENDER ================= */
+  function itemHTML(item, n){
+    const id = item.id;
+    let control = '';
+
+    if (item.type === 'num' || item.type === 'word' || item.type === 'expr' || item.type === 'expr6') {
+      const ph = (item.type === 'expr' || item.type === 'expr6') ? 'ex.: 2(x + 4)'
+               : item.type === 'word' ? 'palavra' : 'resultado';
+      const im = item.type === 'num' ? 'inputmode="numeric"' : 'spellcheck="false"';
+      control = '<input class="ans" data-id="' + id + '" type="text" ' + im +
+                ' autocomplete="off" aria-label="Resposta do item ' + n + '" placeholder="' + ph + '">';
+    } else if (item.type === 'text') {
+      control = '<textarea class="ans" data-id="' + id + '" rows="2" aria-label="Resposta do item ' + n +
+                '" placeholder="escreva com suas palavras"></textarea>';
+    } else if (item.type === 'choice') {
+      control = '<div class="opts">' + item.options.map(function (o, j) {
+        return '<label class="opt"><input type="radio" name="' + id + '" value="' + j +
+               '" data-id="' + id + '"><span>' + o + '</span></label>';
+      }).join('') + '</div>';
+    }
+
+    const stmt = item.type === 'num'
+      ? '<code class="stmt">' + item.q + '</code>'
+      : '<span class="stmt-plain">' + item.q + '</span>';
+
+    const btns = '<button class="btn" data-act="check" data-id="' + id + '">' +
+                 (item.type === 'text' ? 'Registrar' : 'Corrigir') + '</button>' +
+                 (item.hint ? '<button class="btn ghost" data-act="hint" data-id="' + id + '">Dica</button>' : '') +
+                 (item.sol ? '<button class="btn ghost" data-act="reveal" data-id="' + id + '">' +
+                   (item.type === 'text' ? 'Modelo' : 'Resposta') + '</button>' : '');
+
+    return '<article class="item">' +
+      '<div class="q"><span class="num">' + n + '</span>' + stmt + '</div>' +
+      (item.type === 'choice' ? control : '<div class="controls">' + control + btns + '</div>') +
+      (item.type === 'choice' ? '<div class="controls" style="margin-top:8px">' + btns + '</div>' : '') +
+      (item.hint ? '<p class="hint" data-role="hint" data-id="' + id + '" hidden>Dica: ' + item.hint + '</p>' : '') +
+      (item.sol ? '<p class="sol" data-role="sol" data-id="' + id + '" hidden>' + item.sol + '</p>' : '') +
+      '<p class="fb" data-role="fb" data-id="' + id + '" aria-live="polite"></p>' +
+    '</article>';
+  }
+
+  function codeHTML(){
+    return '<div class="code">' +
+      '<p class="code-label">Palavra decifrada</p>' +
+      '<div class="slots">' +
+      CODE_LETTERS.map(function (_, i) {
+        return '<span class="slot" data-slot="' + i + '">?</span>';
+      }).join('') +
+      '</div></div>';
+  }
+
+  function blockHTML(b){
+    return '<section class="card" data-block="' + b.id + '">' +
+      '<div class="card-head">' +
+        '<span class="chip">Bloco ' + b.id + '</span>' +
+        '<h2>' + b.title + '</h2>' +
+        '<span class="badge" data-role="blockbadge" data-block="' + b.id + '">✓ concluído</span>' +
+        '<button class="btn ghost small" data-act="checkblock" data-block="' + b.id + '">Corrigir bloco</button>' +
+      '</div>' +
+      (b.intro ? '<p class="intro">' + b.intro + '</p>' : '') +
+      b.items.map(function (it, i) { return itemHTML(it, i + 1); }).join('') +
+      (b.id === 'D' ? codeHTML() : '') +
+    '</section>';
+  }
+
+  function render(){
+    el('app').innerHTML = BLOCKS.map(blockHTML).join('');
+    restore();
+    updateProgress();
+    renderCode();
+  }
+
+  /* ================= RESTAURAR ================= */
+  function restore(){
+    Object.keys(store.answers).forEach(function (id) {
+      const val = store.answers[id];
+      const radio = document.querySelector('input[type="radio"][data-id="' + id + '"][value="' + val + '"]');
+      if (radio) { radio.checked = true; return; }
+      const field = document.querySelector('.ans[data-id="' + id + '"]');
+      if (field && !field.classList.contains('diary-in')) field.value = val;
+    });
+    Object.keys(store.diary).forEach(function (id) {
+      const f = el(id);
+      if (f) f.value = store.diary[id];
+    });
+    Object.keys(store.status).forEach(function (id) {
+      if (store.status[id] !== 'ok') return;
+      const field = document.querySelector('.ans[data-id="' + id + '"]');
+      if (field && !field.classList.contains('diary-in')) field.classList.add('ok');
+      const fb = document.querySelector('[data-role="fb"][data-id="' + id + '"]');
+      if (fb) { fb.className = 'fb ok'; fb.textContent = 'Registrado como correto.'; }
+    });
+  }
+
+  /* ================= CORREÇÃO ================= */
+  function evaluate(item){
+    const id = item.id;
+    const raw = store.answers[id] != null ? String(store.answers[id]) : '';
+
+    if (item.type === 'num') {
+      const v = parseNum(raw);
+      if (v === null) return { ok:false, msg:'Escreva um número. Use vírgula ou ponto para decimais.' };
+      if (item.answers.some(function (a) { return Math.abs(a - v) < 1e-9; }))
+        return { ok:true, msg:'Correto.' };
+      return { ok:false, msg:'Ainda não. Volte à ordem das operações.' };
+    }
+
+    if (item.type === 'word') {
+      if (!raw.trim()) return { ok:false, msg:'Escreva a palavra que você decifrou.' };
+      if (item.answers.some(function (a) { return stripAccents(a) === stripAccents(raw); }))
+        return { ok:true, msg:'Correto.' };
+      return { ok:false, msg:'Ainda não. Confira o valor de x em cada linha.' };
+    }
+
+    if (item.type === 'expr' || item.type === 'expr6') {
+      if (!raw.trim()) return { ok:false, msg:'Escreva uma expressão com x.' };
+      try {
+        if (item.type === 'expr6') {
+          const v = evalRPN(compile(raw), 6);
+          if (!isFinite(v)) return { ok:false, msg:'Sua expressão não devolve um número válido quando x = 6.' };
+          if (Math.abs(v - 20) < 1e-9) return { ok:true, msg:'Correto: com x = 6 dá 20.' };
+          return { ok:false, msg:'Sua expressão dá ' + fmt(v) + ' quando x = 6. Precisa dar 20.' };
+        }
+        if (equivalent(raw, item.expect)) return { ok:true, msg:'Correto — a tradução é equivalente.' };
+        return { ok:false, msg:'Ainda não. Compare com a instrução: quem é somado antes, e o que os parênteses abraçam?' };
+      } catch (err) {
+        return { ok:false, msg:'Não consegui ler essa expressão. Use números, x, + − × ÷ e parênteses.' };
+      }
+    }
+
+    if (item.type === 'choice') {
+      if (raw === '') return { ok:false, msg:'Escolha uma das opções.' };
+      if (Number(raw) === item.correct) return { ok:true, msg:'Correto.' };
+      return { ok:false, msg:'Ainda não. Releia a solução do caderno passo a passo.' };
+    }
+
+    if (item.type === 'text') {
+      if (raw.trim().length < 5) return { ok:false, msg:'Escreva ao menos uma frase curta.' };
+      return { ok:true, msg:'Registrado. Compare com o modelo, se quiser.' };
+    }
+
+    return { ok:false, msg:'Item sem correção automática.' };
+  }
+
+  function runCheck(item, silent){
+    const res = evaluate(item);
+    const id = item.id;
+    store.status[id] = res.ok ? 'ok' : 'bad';
+    persist();
+
+    const fb = document.querySelector('[data-role="fb"][data-id="' + id + '"]');
+    if (fb) {
+      fb.className = 'fb ' + (res.ok ? 'ok' : 'bad');
+      fb.textContent = res.msg;
+    }
+    const field = document.querySelector('.ans[data-id="' + id + '"]');
+    if (field && !field.classList.contains('diary-in')) {
+      field.classList.toggle('ok', res.ok);
+      field.classList.toggle('bad', !res.ok);
+    }
+    if (!silent) updateProgress();
+    return res.ok;
+  }
+
+  /* ================= PROGRESSO ================= */
+  function blockDone(b){
+    return b.items.every(function (it) { return store.status[it.id] === 'ok'; });
+  }
+  function diaryDone(){
+    return ['k1','k2','k3'].every(function (k) { return (store.diary[k] || '').trim().length >= 3; });
+  }
+  function updateProgress(){
+    const total = BLOCKS.length + 1;
+    let done = BLOCKS.filter(blockDone).length + (diaryDone() ? 1 : 0);
+
+    el('progfill').style.width = Math.round(done / total * 100) + '%';
+    el('proglabel').textContent = done + ' de ' + total + ' etapas concluídas';
+
+    BLOCKS.forEach(function (b) {
+      const badge = document.querySelector('[data-role="blockbadge"][data-block="' + b.id + '"]');
+      if (badge) badge.classList.toggle('on', blockDone(b));
+    });
+    const db = el('diarybadge');
+    if (db) db.classList.toggle('on', diaryDone());
+  }
+
+  function renderCode(){
+    document.querySelectorAll('[data-slot]').forEach(function (slot, i) {
+      const ok = store.status['d' + (i + 1)] === 'ok';
+      slot.textContent = ok ? CODE_LETTERS[i] : '?';
+      slot.classList.toggle('filled', ok);
+    });
+  }
+
+  /* ================= EVENTOS ================= */
+  document.addEventListener('input', function (e) {
+    const t = e.target;
+    if (!t || !t.dataset) return;
+    const id = t.dataset.id;
+    if (!id) return;
+    if (t.classList.contains('diary-in')) { store.diary[id] = t.value; }
+    else { store.answers[id] = t.value; }
+    persist();
+    updateProgress();
+  });
+
+  document.addEventListener('change', function (e) {
+    const t = e.target;
+    if (t && t.type === 'radio' && t.dataset.id) {
+      store.answers[t.dataset.id] = t.value;
+      persist();
+    }
+  });
+
+  document.addEventListener('click', function (e) {
+    const btn = e.target.closest('button[data-act]');
+    if (!btn) return;
+    const act = btn.dataset.act;
+
+    if (act === 'check' || act === 'reveal' || act === 'hint') {
+      const item = ITEMS[btn.dataset.id];
+      if (!item) return;
+      if (act === 'check') { runCheck(item); }
+      if (act === 'hint') {
+        const h = document.querySelector('[data-role="hint"][data-id="' + item.id + '"]');
+        if (h) h.hidden = !h.hidden;
+      }
+      if (act === 'reveal') {
+        const s = document.querySelector('[data-role="sol"][data-id="' + item.id + '"]');
+        if (s) s.hidden = !s.hidden;
+      }
+      return;
+    }
+
+    if (act === 'checkblock') {
+      const block = BLOCKS.filter(function (b) { return b.id === btn.dataset.block; })[0];
+      if (!block) return;
+      let ok = 0;
+      block.items.forEach(function (it) { if (runCheck(it, true)) ok++; });
+      updateProgress();
+      renderCode();
+      btn.textContent = ok + '/' + block.items.length + ' corretos';
+      setTimeout(function () { btn.textContent = 'Corrigir bloco'; }, 2200);
+      return;
+    }
+  });
+
+  /* ================= FERRAMENTAS ================= */
+  el('print').addEventListener('click', function () { window.print(); });
+
+  el('export').addEventListener('click', function () {
+    const lines = ['CADERNO DO DR. ANSELMO — RESPOSTAS', 'Data: ' + new Date().toLocaleString('pt-BR'), ''];
+    BLOCKS.forEach(function (b) {
+      lines.push('=== Bloco ' + b.id + ' — ' + b.title + ' ===');
+      b.items.forEach(function (it, i) {
+        const ans = store.answers[it.id] != null ? store.answers[it.id] : '(em branco)';
+        const st = store.status[it.id] === 'ok' ? 'OK' : '—';
+        lines.push((i + 1) + '. [' + st + '] ' + it.q);
+        lines.push('   Resposta: ' + ans);
+      });
+      lines.push('');
+    });
+    lines.push('=== Diário de bordo ===');
+    ['k1','k2','k3'].forEach(function (k) {
+      lines.push(k + ': ' + (store.diary[k] || '(em branco)'));
+    });
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'caderno-anselmo-respostas.txt';
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 3000);
+  });
+
+  el('reset').addEventListener('click', function () {
+    if (!confirm('Apagar todas as respostas e recomeçar?')) return;
+    store = { answers:{}, status:{}, diary:{} };
+    persist();
+    document.querySelectorAll('.ans').forEach(function (f) {
+      if (f.type !== 'radio') f.value = '';
+      f.classList.remove('ok','bad');
+    });
+    document.querySelectorAll('input[type="radio"]').forEach(function (r) { r.checked = false; });
+    document.querySelectorAll('.fb').forEach(function (f) { f.textContent = ''; f.className = 'fb'; });
+    document.querySelectorAll('[data-role="sol"],[data-role="hint"]').forEach(function (p) { p.hidden = true; });
+    updateProgress();
+    renderCode();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  document.addEventListener('click', function (e) {
+    const b = e.target.closest('[data-copy]');
+    if (!b) return;
+    const src = el(b.dataset.copy);
+    if (!src) return;
+    const txt = src.textContent;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(function () {
+        b.textContent = 'copiado';
+        setTimeout(function () { b.textContent = 'copiar'; }, 1600);
+      });
+    }
+  });
+
+  /* ================= PWA ================= */
+  const ICON = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%231b2a41'/%3E%3Ctext x='256' y='340' font-family='Georgia,serif' font-size='190' fill='%23e0b45c' text-anchor='middle'%3E(x)%3C/text%3E%3C/svg%3E";
+
+  try {
+    const manifest = {
+      name: 'Caderno do Dr. Anselmo',
+      short_name: 'Dr. Anselmo',
+      description: 'Missão de matemática — 7º ano',
+      start_url: '.',
+      scope: '.',
+      display: 'standalone',
+      orientation: 'portrait',
+      background_color: '#f4efe4',
+      theme_color: '#1b2a41',
+      lang: 'pt-BR',
+      icons: [{ src: ICON, sizes: 'any', type: 'image/svg+xml', purpose: 'any' }]
+    };
+    const link = document.createElement('link');
+    link.rel = 'manifest';
+    link.href = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest));
+    document.head.appendChild(link);
+  } catch (e) {}
+
+  if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('./sw.js').catch(function () {
+        /* sem sw.js: o app continua funcionando, só não fica cacheado */
+      });
+    });
+  }
+
+  /* ================= INÍCIO ================= */
+  render();
+})();
+</script>
+</body>
+</html>
